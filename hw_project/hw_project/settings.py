@@ -131,7 +131,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "static/"
-LOGIN_REDIRECT_URL = "/users/login"  # шлях, куди направлятиметься юзер після його успішної аутентифікації
+LOGIN_REDIRECT_URL = "/"  # шлях, куди направлятиметься юзер після його успішної аутентифікації
 LOGIN_URL = "/users/login"  # шлях, куди перенаправлятиметься юзер у випадку спроби пройти без аутентифікації
 
 

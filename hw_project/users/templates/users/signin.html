@@ -1,10 +1,25 @@
 {% extends "quotes/base.html" %}
-
 {% block content %}
-
 <div>
     <h1>Sign In</h1>
 </div>
+
+<!--Виводимо Flash сповіщення-->
+{% if messages %}
+{% for message in messages %}
+<div {% if message.tags %} class="alert alert-{{message.tags}}" {% endif %} role="alert">
+    {{message}}
+</div>
+{% endfor %}
+{% endif %}
+
+<!--Обробляємо помилки форми, які не відносяться до полів -->
+{% if form.errors %}
+<div class="alert alert-danger" role="alert">
+  {{form.non_field_errors}}
+</div>
+{% endif %}
+
 
 <form method="post">
     {% csrf_token %}
