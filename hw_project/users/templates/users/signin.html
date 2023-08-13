@@ -1,0 +1,30 @@
+{% extends "quotes/base.html" %}
+
+{% block content %}
+
+<div>
+    <h1>Sign In</h1>
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    <div class="form-row">
+        <div class="mb-3">
+            <label class="form-label">Username</label>
+            {{form.username}}
+        </div>
+        <span>{{form.errors.username}}</span>
+    </div>
+
+    <div class="form-row">
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            {{form.password}}
+        </div>
+        <span>{{form.errors.password}}</span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Sign In</button>
+</form>
+
+{% endblock %}

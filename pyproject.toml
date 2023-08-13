@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "kulyk-goit-pythonweb-hw-10"
+version = "0.1.0"
+description = ""
+authors = ["evgen-kulik <e.kulik.atom@gmail.com>"]
+readme = "README.md"
+packages = [{include = "kulyk_goit_pythonweb_hw_10"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+django = "^4.2.4"
+psycopg2 = "^2.9.7"
+pymongo = "^4.4.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
