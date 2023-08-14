@@ -12,8 +12,8 @@
                 {{quote.quote}}
             </span>
             <span>by <small class="author" itemprop="author">{{quote.author|author}}</small>
-        <a href="/author/{{quote.author}}">(about)</a>
-        </span>
+                <a href="{% url 'description' pic.id %}">(about)</a>
+            </span>
             <div class="tags">
                 Tags:
                 {% for tag in quote.tags %}
