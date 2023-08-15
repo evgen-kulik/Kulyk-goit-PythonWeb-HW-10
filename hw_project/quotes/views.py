@@ -17,7 +17,7 @@ def main(request, page=1):
 
 
 def about(request, pic_id):
-    description = get_object_or_404(Author, pk=pic_id)
+    description = Author.objects.filter(pk=pic_id).first()
     print(description)
     return render(request, 'quotes/description.html', context={'authors': description})
 

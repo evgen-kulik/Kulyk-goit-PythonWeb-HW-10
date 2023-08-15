@@ -12,7 +12,7 @@
                 {{quote.quote}}
             </span>
             <span>by <small class="author" itemprop="author">{{quote.author|author}}</small>
-                <a href="{% url 'description' pic.id %}">(about)</a>
+                <a href="{% url 'quotes:description' pic.id %}">(about)</a>
             </span>
             <div class="tags">
                 Tags:
