@@ -1,17 +1,6 @@
-from django.http import HttpResponse
-
-from django.shortcuts import render, get_object_or_404
-from django.core.paginator import Paginator
-
-from .models import Author
-
-# Create your views here.
-from .utils import get_mongodb
-from bson.objectid import ObjectId
 import psycopg2
 
 
-# імпортувати з папки utils не виходить, тому прописано тут
 def make_total_list_from_postgres():
     """
     Повертає список словників зі всією інформацією для сайту з бази даних postgres
@@ -44,7 +33,7 @@ def make_total_list_from_postgres():
         dct["born_location"] = i[3]
         dct["description"] = i[4]
         dct["quote"] = i[5]
-        dct["tags"] = [i[6]]
+        # dct["tags"] = [i[6]]
         total_list.append(dct)
     # print(total_list)
     # print(len(total_list))
@@ -72,44 +61,13 @@ def make_total_list_from_postgres():
     for i in total_list:
         # print(i)
         for key in tags_dct:
+            print(key)
             if i["id"] == key:
                 i["tags"] = tags_dct[key]
     # print(len(total_list))
-    # print(total_list)
+    print(total_list)
     return total_list
 
 
-def main(request, page=1):
-    total_list = make_total_list_from_postgres()
-    print(total_list)
-    per_page = 10  # виводиметься по 10 елементів на сторінці
-    paginator = Paginator(total_list, per_page)
-    quotes_on_page = paginator.page(
-        page
-    )  # тут список всіх елементів розбивається по сторінках
-    return render(request, "quotes/index.html", context={"quotes": quotes_on_page})
-
-    # -------------------------------
-    # db = get_mongodb()  # зробили конект до БД
-    # quotes = db.quotes.find()  # знайшли всі quotes, прокидуємо їх в context=
-    # print(list(quotes))
-    # per_page = 10  # виводиметься по 10 елементів на сторінці
-    # paginator = Paginator(list(quotes), per_page)
-    # quotes_on_page = paginator.page(page)  # тут список всіх елементів розбивається по сторінках
-    # # print('---------------', list(quotes_on_page))
-    # return render(request, 'quotes/index.html', context={'quotes': quotes_on_page})
-    # -------------------------------
-
-
-def about(request, quote_id):
-    # description =
-
-    description = Author.objects.filter(pk=quote_id)
-    # description = Author.objects.filter(pk=pic_id)
-    # # description = Author.objects.all().filter(pk=pic_id).first()
-    # # description = Author.objects.all().filter(pk=pic_id)
-    # # description = Author.objects.all()
-    #
-    print(list(description))
-    print("About done!")
-    return render(request, "quotes/description.html", context={"authors": description})
+if __name__ == "__main__":
+    make_total_list_from_postgres()

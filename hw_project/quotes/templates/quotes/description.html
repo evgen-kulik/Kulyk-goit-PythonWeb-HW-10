@@ -4,17 +4,16 @@
 {% block content %}
 
 <div class="author-details">
-    {% for el in authors %}
+        {% for el in authors %}
         <h3 class="author-title">
             {{el.fullname}}
         </h3>
-        <p><strong>Born:</strong> <span class="author-born-date">{{el.date_born}}</span> <span
-                class="author-born-location">{{el.location_born}}</span>
+        <p><strong>Born:</strong> <span class="author-born-date">{{el.born_date}}</span> <span
+                class="author-born-location">{{el.born_location}}</span>
         </p>
         <p><strong>Description:</strong></p>
-        <div class="author-description">{{el.bio}}</div>
-    {% endfor %}
-
+        <div class="author-description">{{el.description}}</div>
+        {% endfor %}
 </div>
 
 {% endblock %}
