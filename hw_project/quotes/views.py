@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
 
-from .models import Author
+from .models import Author, Tag, Quote
 
 # Create your views here.
 from .utils import get_mongodb
@@ -67,6 +67,8 @@ def make_total_list_from_postgres():
                 tags_dct[i[0]].append(i[1])
     # print(tags_dct)
     # print(len(tags_dct))
+    cursor.close()
+    conn.close()
 
     # додамо списки тегів в загальний список словників
     for i in total_list:
@@ -81,35 +83,37 @@ def make_total_list_from_postgres():
 
 def main(request, page=1):
     total_list = make_total_list_from_postgres()
-    print(total_list)
+    # print(total_list)
     per_page = 10  # виводиметься по 10 елементів на сторінці
     paginator = Paginator(total_list, per_page)
+    # після обробки total_list в Paginator, до елементів списку total_list можна звертатися як до Queryset
     quotes_on_page = paginator.page(
         page
     )  # тут список всіх елементів розбивається по сторінках
     return render(request, "quotes/index.html", context={"quotes": quotes_on_page})
 
-    # -------------------------------
-    # db = get_mongodb()  # зробили конект до БД
-    # quotes = db.quotes.find()  # знайшли всі quotes, прокидуємо їх в context=
-    # print(list(quotes))
-    # per_page = 10  # виводиметься по 10 елементів на сторінці
-    # paginator = Paginator(list(quotes), per_page)
-    # quotes_on_page = paginator.page(page)  # тут список всіх елементів розбивається по сторінках
-    # # print('---------------', list(quotes_on_page))
-    # return render(request, 'quotes/index.html', context={'quotes': quotes_on_page})
-    # -------------------------------
-
 
 def about(request, quote_id):
-    # description =
+    """Перехід по кнопці 'about'"""
 
     description = Author.objects.filter(pk=quote_id)
-    # description = Author.objects.filter(pk=pic_id)
-    # # description = Author.objects.all().filter(pk=pic_id).first()
-    # # description = Author.objects.all().filter(pk=pic_id)
-    # # description = Author.objects.all()
-    #
-    print(list(description))
-    print("About done!")
     return render(request, "quotes/description.html", context={"authors": description})
+
+
+def authors_by_tags(request, tag_name):
+    """Перехід по тегу"""
+
+    # зберемо список з БД та виберемо з нього список id з тегом tag_name
+    list_authors = []
+    total_list = make_total_list_from_postgres()
+    for el in total_list:
+        if tag_name in el["tags"]:
+            list_authors.append(el['id'])
+    list_authors = list(set(list_authors))  # список id авторів, в яких є тег tag_name
+    print(list_authors)
+    quotes = Quote.objects.filter(pk__in=list_authors)  # фільтрація по списку айдішок, видає кілька авторів
+    authors = Author.objects.filter(pk__in=list_authors)  # для отримання в tags.html ім'я автора (тому що в Quote тільки № Object)
+
+
+    return render(request, "quotes/tags.html", context={"quotes": quotes, "authors": authors})
+

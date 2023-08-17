@@ -1,5 +1,4 @@
 {% extends 'quotes/base.html' %}
-{% load extract %}
 
 {% block content %}
 
@@ -12,12 +11,12 @@
                 {{quote.quote}}
             </span>
             <span>by <small class="author" itemprop="author">{{quote.author}}</small>
-                <a href="{% url 'quotes:description' quote.id %}">(about)</a>
+                <a href="{% url 'quotes:description' quote_id=quote.id %}">(about)</a>
             </span>
             <div class="tags">
                 Tags:
                 {% for tag in quote.tags %}
-                <a class="tag" href="/tag/{{tag}}">{{tag}}</a>
+                <a class="tag" href="{% url 'quotes:tags' tag_name=tag %}">{{tag}}</a>
                 {% endfor %}
             </div>
         </div>
