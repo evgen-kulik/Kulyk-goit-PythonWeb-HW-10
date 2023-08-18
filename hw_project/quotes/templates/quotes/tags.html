@@ -3,25 +3,24 @@
 {% block content %}
 
 {% for quote in quotes %},
-{% for author in authors %}
 <div class="row">
     <div class="col-md-8">
         <div class="quote" itemscope="" itemtype="http://schema.org/CreativeWork">
             <span class="text" itemprop="text">
                 {{quote.quote}}
             </span>
-            <span>by <small class="author" itemprop="author">{{author.fullname}}</small>
+            <span>by <small class="author" itemprop="author">{{quote.author.fullname}}</small>
                 <a href="{% url 'quotes:description' quote_id=quote.id %}">(about)</a>
             </span>
             <div class="tags">
                 Tags:
                 {% for tag in quote.tags.all %}
-                <a class="tag" href="{% url 'quotes:tags' tag_name=tag %}">{{tag}}</a>
+                <a class="tag" href="{% url 'quotes:tags' tag_name=tag.name %}">{{tag.name}}</a>
                 {% endfor %}
             </div>
 
         </div>
     </div>
 </div>
-{% endfor %} {% endfor %}
+{% endfor %}
 {% endblock %}

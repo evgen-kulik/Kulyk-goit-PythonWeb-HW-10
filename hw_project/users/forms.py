@@ -13,7 +13,7 @@ class RegisterForm(UserCreationForm):
     #                       widget=PasswordInput(attrs={"class": "form-control"}))
     # password2 = CharField(max_length=12, min_length=8, required=True,
     #                       widget=PasswordInput(attrs={"class": "form-control"}))
-    # Чомусь з цим описанням не працює (залишаєшся на signup)
+    # Чомусь з цим описом не працює (залишаєшся на signup)
 
     class Meta:
         model = User

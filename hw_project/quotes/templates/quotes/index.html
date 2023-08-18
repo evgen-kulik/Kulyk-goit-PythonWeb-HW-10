@@ -8,15 +8,15 @@
         {% for quote in quotes %}
         <div class="quote" itemscope="" itemtype="http://schema.org/CreativeWork">
             <span class="text" itemprop="text">
-                {{quote.quote}}
+                {{ quote.quote }}
             </span>
-            <span>by <small class="author" itemprop="author">{{quote.author}}</small>
+            <span>by <small class="author" itemprop="author">{{ quote.author }}</small>
                 <a href="{% url 'quotes:description' quote_id=quote.id %}">(about)</a>
             </span>
             <div class="tags">
                 Tags:
                 {% for tag in quote.tags %}
-                <a class="tag" href="{% url 'quotes:tags' tag_name=tag %}">{{tag}}</a>
+                <a class="tag" href="{% url 'quotes:tags' tag_name=tag %}">{{ tag }}</a>
                 {% endfor %}
             </div>
         </div>
@@ -42,9 +42,13 @@
 
     <div class="col-md-4">
         <p>
+            {% if user.is_authenticated %}
+            <a href="{% url 'users:logout' %}" class="btn btn-primary">Logout</a>
+            <a href="{% url 'quotes:add_author' %}"class="btn btn-primary">Add author</a>
+            {% else %}
             <a href="{% url 'users:register' %}" class="btn btn-primary">SignUp</a>
             <a href="{% url 'users:login' %}" class="btn btn-primary">Login</a>
-            <a href="{% url 'users:logout' %}" class="btn btn-primary">Logout</a>
+            {% endif %}
         </p>
     </div>
 

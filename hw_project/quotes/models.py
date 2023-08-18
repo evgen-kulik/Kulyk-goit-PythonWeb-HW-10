@@ -6,7 +6,7 @@ from django.urls import reverse
 
 
 class Author(models.Model):
-    fullname = models.CharField(max_length=50)
+    fullname = models.CharField(max_length=50, unique=True)
     born_date = models.CharField(max_length=50)
     born_location = models.CharField(max_length=150)
     description = models.TextField()
