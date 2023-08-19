@@ -1,4 +1,5 @@
-from django.forms import ModelForm, CharField, TextInput, ModelChoiceField, ModelMultipleChoiceField
+from django.forms import ModelForm, CharField, TextInput, ModelChoiceField, ModelMultipleChoiceField, \
+    CheckboxSelectMultiple
 from .models import Tag, Author, Quote
 
 
@@ -11,17 +12,13 @@ class TagForm(ModelForm):
 
 
 class QuoteForm(ModelForm):
-    author = ModelChoiceField(queryset=Author.objects.none())  # noqa
-    tags = ModelMultipleChoiceField(queryset=Tag.objects.none())  # noqa
+    author = ModelChoiceField(queryset=Author.objects.all())
+    tags = ModelMultipleChoiceField(queryset=Tag.objects.all(), widget=CheckboxSelectMultiple)
+
 
     class Meta:
         model = Quote
         fields = ['quote', 'author', 'tags']
-
-    # def __init__(self, user: User, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     self.fields['author'].queryset = Author.objects.filter(user=user)  # noqa
-    #     self.fields['tags'].queryset = Tag.objects.all()  # noqa
 
 
 class AuthorForm(ModelForm):

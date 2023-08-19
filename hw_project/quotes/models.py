@@ -12,9 +12,15 @@ class Author(models.Model):
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.fullname  # Для відображення на сторінці fullname, а не object_id
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=100, null=False, unique=True)
+
+    def __str__(self):
+        return self.name  # Для відображення на сторінці і в адмінці name, а не object_id
 
 
 class Quote(models.Model):
@@ -24,3 +30,6 @@ class Quote(models.Model):
         Author, on_delete=models.CASCADE, default=None, null=True
     )
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.quote

@@ -1,19 +1,11 @@
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
-
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
-from django.utils.decorators import method_decorator
 from django.views import View
-from django.db import IntegrityError
 
 from .forms import AuthorForm, QuoteForm
 from .models import Author, Tag, Quote
 
 # Create your views here.
-from .utils import get_mongodb
-from bson.objectid import ObjectId
 import psycopg2
 
 
@@ -135,72 +127,26 @@ class AuthorView(View):
         return render(request, self.template_name, {"form": form})
         # у випадку неуспішності валідації юзер залишається на тій самій сторінці
 
-
+#---------------------------------------------------------
 class QuoteView(View):
     """Додавання цитати"""
 
-    quotes_per_page = 10
-    # template_get = 'quotes/quotes.html'
-    template_add = 'quotes/add_quote.html'
+    template_name = 'quotes/add_quote.html'
     form_class = QuoteForm
     model = Quote
 
-    def dispatch(self, request, *args, **kwargs):
-        if request.method == 'GET':
-            if 'add' in request.path:
-                return self.get_form(request)
-            elif 'scrape' in request.path:
-                return self.scrape(request)
+    def get(self, request):
+        """Повертає рендеринг сторінки"""
+        return render(request, self.template_name, {"form": self.form_class()})
 
-        return super().dispatch(request, *args, **kwargs)
-
-    def get(self, request, **kwargs):
-        match kwargs:
-            case {'tag': tag}:
-                quotes = self.model.objects.filter(tags__name=tag).order_by('-id')  # noqa
-            case _:
-                quotes = self.model.objects.all().order_by('-id')  # noqa
-
-        top_tags = Tag.objects.annotate(num_quotes=Count('quote')).order_by('-num_quotes')[:10]  # noqa
-
-        paginator = Paginator(quotes, self.quotes_per_page)
-
-        context = {
-            'page_obj': paginator.get_page(request.GET.get('page')),
-            'user': request.user,
-            'top_tags': top_tags,
-            'by_tag': kwargs.get('tag'),
-        }
-        return render(request, self.template_get, context)
-
-    @method_decorator(login_required)
-    def scrape(self, request):
-        scrape_quotes(request.user)
-        return redirect('quote:index')
-
-    @method_decorator(login_required)
-    def get_form(self, request):
-        return render(request, self.template_add, {'form': self.form_class(request.user)})
-
-    @method_decorator(login_required)
     def post(self, request):
-        form = self.form_class(request.user, request.POST)
+        """Логіка роботи з полями автора"""
 
-        if not form.is_valid():
-            return render(request, self.template_add, {'form': form})
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            form.save()  # Запис у БД
+            return redirect(to='quotes:root')
 
-        try:
-            new_quote = form.save(commit=False)
-            new_quote.user = request.user
-
-            new_quote.save()
-            form.save_m2m()
-
-        except IntegrityError as e:
-            if 'unique constraint "quote of username"' in str(e):
-                form.add_error('quote', "This quote already exists. Please add a new quote.")
-
-            return render(request, self.template_add, {'form': form})
-
-        return redirect('quote:index')
+        return render(request, self.template_name, {"form": form})
+        # у випадку неуспішності валідації юзер залишається на тій самій сторінці
 
