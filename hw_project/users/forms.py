@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
@@ -5,14 +6,15 @@ from django.forms import CharField, TextInput, EmailField, EmailInput, PasswordI
 
 
 class RegisterForm(UserCreationForm):
-    # username = CharField(max_length=100, required=True, widget=TextInput(attrs={"class": "form-control"}))
-    # first_name = CharField(max_length=150, widget=TextInput(attrs={"class": "form-control"}))
-    # last_name = CharField(max_length=150, widget=TextInput(attrs={"class": "form-control"}))
-    # email = EmailField(max_length=150, required=True, widget=EmailInput(attrs={"class": "form-control"}))
-    # password1 = CharField(max_length=12, min_length=8, required=True,
-    #                       widget=PasswordInput(attrs={"class": "form-control"}))
-    # password2 = CharField(max_length=12, min_length=8, required=True,
-    #                       widget=PasswordInput(attrs={"class": "form-control"}))
+    # username = forms.CharField(max_length=100, required=True, widget=TextInput(attrs={"class": "form-control"}))
+    # first_name = forms.CharField(max_length=150, widget=TextInput(attrs={"class": "form-control"}))
+    # last_name = forms.CharField(max_length=150, widget=TextInput(attrs={"class": "form-control"}))
+    # email = forms.EmailField(max_length=150, required=True, widget=EmailInput(attrs={"class": "form-control"}))
+    # password1 = forms.CharField(max_length=12, min_length=8, required=True,
+    #                             widget=PasswordInput(attrs={"class": "form-control"}))
+    # password2 = forms.CharField(max_length=12, min_length=8, required=True,
+    #                             widget=PasswordInput(attrs={"class": "form-control"}))
+
     # Чомусь з цим описом не працює (залишаєшся на signup)
 
     class Meta:
@@ -32,7 +34,7 @@ class LoginForm(AuthenticationForm):
         max_length=100, required=True, widget=TextInput(attrs={"class": "form-control"})
     )
     password = CharField(
-        max_length=12,
+        max_length=20,
         min_length=4,
         required=True,
         widget=PasswordInput(attrs={"class": "form-control"}),
