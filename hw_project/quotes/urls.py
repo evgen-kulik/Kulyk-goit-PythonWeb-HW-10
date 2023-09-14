@@ -8,8 +8,8 @@ urlpatterns = [
     path("<int:page>", views.main, name="root_paginate"),
     path("description/<int:quote_id>/", views.about, name="description"),
     path("tags/<str:tag_name>", views.authors_by_tags, name="tags"),
-    path('author/add/', views.AuthorView.as_view(), name='add_author'),
-    path('quote/add/', views.QuoteView.as_view(), name='add_quote'),
+    path("author/add/", views.AuthorView.as_view(), name="add_author"),
+    path("quote/add/", views.QuoteView.as_view(), name="add_quote"),
 ]
 # "" - вказуємо на корінь проєкту; root - ім'я для маршруту
 # <int:auth_id> - пасс-параметр (№ id в БД) до якого ми маємо доступ

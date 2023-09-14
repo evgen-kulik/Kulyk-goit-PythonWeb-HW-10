@@ -20,7 +20,9 @@ class Tag(models.Model):
     name = models.CharField(max_length=100, null=False, unique=True)
 
     def __str__(self):
-        return self.name  # Для відображення на сторінці і в адмінці name, а не object_id
+        return (
+            self.name
+        )  # Для відображення на сторінці і в адмінці name, а не object_id
 
 
 class Quote(models.Model):

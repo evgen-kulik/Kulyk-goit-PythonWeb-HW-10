@@ -7,7 +7,12 @@ from .models import Author, Tag, Quote
 
 
 def main(request, page=1):
-    quotes = Quote.objects.select_related('author').prefetch_related('tags').all().order_by('created_at')
+    quotes = (
+        Quote.objects.select_related("author")
+        .prefetch_related("tags")
+        .all()
+        .order_by("created_at")
+    )
     # quotes = Quote.objects.all()  # другий робочий варіант вибірки даних
     per_page = 10  # виводиметься по 10 елементів на сторінці
     paginator = Paginator(quotes, per_page)
@@ -35,7 +40,7 @@ def authors_by_tags(request, tag_name):
 class AuthorView(View):
     """Додавання автора"""
 
-    template_name = 'quotes/add_author.html'
+    template_name = "quotes/add_author.html"
     form_class = AuthorForm
     model = Author
 
@@ -49,7 +54,7 @@ class AuthorView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             form.save()  # Запис у БД
-            return redirect(to='quotes:root')
+            return redirect(to="quotes:root")
 
         return render(request, self.template_name, {"form": form})
         # у випадку неуспішності валідації юзер залишається на тій самій сторінці
@@ -58,7 +63,7 @@ class AuthorView(View):
 class QuoteView(View):
     """Додавання цитати"""
 
-    template_name = 'quotes/add_quote.html'
+    template_name = "quotes/add_quote.html"
     form_class = QuoteForm
     model = Quote
 
@@ -72,8 +77,7 @@ class QuoteView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             form.save()  # Запис у БД
-            return redirect(to='quotes:root')
+            return redirect(to="quotes:root")
 
         return render(request, self.template_name, {"form": form})
         # у випадку неуспішності валідації юзер залишається на тій самій сторінці
-
